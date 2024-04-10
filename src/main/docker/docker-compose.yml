@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+  proxy:
+    image: 'medical-clinic-proxy:latest'
+    hostname: medical-clinic-proxy
+    build:
+      context: .
+    ports:
+      - "8090:8090"
+    container_name: proxy
