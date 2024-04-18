@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 
 networks:
   medical-clinic-network:
@@ -14,8 +14,10 @@ services:
     container_name: proxy
     depends_on:
       - app
+      - mongo_db
     environment:
-      - FEIGN_CLIENT_MEDICAL-CLINIC-CLIENT_URL=http://medical-clinic:8080
+        - FEIGN_CLIENT_MEDICAL-CLINIC-CLIENT_URL=http://medical-clinic:8080
+        - SPRING_DATA_MONGODB_URI=mongodb://mongo_db:27017/medical_clinic_mongodb
 
   app:
     image: 'medical-clinic:latest'
@@ -43,8 +45,20 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  mongo_db:
+    image: mongo:latest
+    restart: always
+    container_name: mongo_db
+    environment:
+      MONGO_INITDB_DATABASE: medical_clinic_mongodb
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodb_data:/var/lib/mongodb/data
+
   pgadmin:
     image: dpage/pgadmin4
+    container_name: pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: 'lukasz@mail.com'
       PGADMIN_DEFAULT_PASSWORD: "sa1234"
@@ -58,5 +72,10 @@ services:
 volumes:
   postgres_data:
     driver: local
+    name: "proxy_db"
   pgadmin_data:
     driver: local
+    name: "proxy_pgadmin"
+  mongodb_data:
+    driver: local
+    name: "proxy_cache"
