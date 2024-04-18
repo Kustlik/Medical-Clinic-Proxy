@@ -15,7 +15,7 @@ import java.util.List;
 
 @FeignClient(
         name = "MedicalClinicClient",
-        url = "${feign.client.MedicalClinicClient.url}",
+        url = "${feign.client.Medical-Clinic-Client.url}",
         configuration = ClientConfiguration.class
 )
 public interface MedicalClinicClient {
